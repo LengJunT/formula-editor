@@ -1,0 +1,50 @@
+.cm-completionIcon-CP {
+  background-color: red;
+}
+.cm-editor .code-autocomplete-tooltip {
+  //max-height: 264px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
+  border-radius: 2px;
+  border: none;
+}
+
+.cm-editor .code-autocomplete-tooltip > ul > li.code-autocomplete-tooltip-option {
+  padding: 5px 10px;
+  display: flex;
+  align-content: center;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  line-height: 22px;
+}
+.cm-editor {
+  height: 200px;
+  .cm-completionLabel {
+    padding-left: 8px;
+    .cm-completionMatchedText {
+      color: rgba(83, 120, 255, 1);
+      text-decoration: none;
+    }
+  }
+
+  .code-autocomplete-tooltip {
+    & > ul {
+      .code-autocomplete-tooltip-option {
+        &-icon {
+          display: flex;
+          align-items: center;
+          .hekit-icon {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.cm-editor .code-autocomplete-tooltip ul .code-autocomplete-tooltip-option[aria-selected] {
+  background:#7bc3fe;
+}
+
