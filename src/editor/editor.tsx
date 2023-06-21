@@ -67,7 +67,7 @@ const Editor: ForwardRefRenderFunction<EditorRefs, PropsType> = (
     keywords,
     operatorKeywords,
     searchContainer,
-    hotkey
+    hotkey, deletedPlaceholders
   }, ref) => {
   const editorRef = useRef<ReactCodeMirrorRef | null>(null);
   const insertText = useCallback((text: string, isTemplate?: boolean) => {
@@ -177,12 +177,12 @@ const Editor: ForwardRefRenderFunction<EditorRefs, PropsType> = (
         keywordsColor,
         keywords,
         operatorKeywords, searchContainer,
-        hotkey, editorRef
+        hotkey, editorRef, deletedPlaceholders
       }),
       // javascript(),
       // javascriptLanguage
     ]
-    }, [quickMatchMap, completions, operatorKeywords, searchContainer, hotkey]
+    }, [quickMatchMap, completions, operatorKeywords, searchContainer, hotkey, deletedPlaceholders]
   )
 
   const [value, setValue] = useState(defaultValue??'')

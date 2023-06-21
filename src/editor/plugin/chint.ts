@@ -32,7 +32,7 @@ export const hintPlugin = (hintPaths: HintPathType[], quickMatchMap: QuickMatchM
     }
 
     if (!path) return null;
-    console.log('hint', path, latestChar)
+    // console.log('hint', path, latestChar)
     //
     // if (path) {
     //   return {

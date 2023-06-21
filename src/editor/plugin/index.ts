@@ -26,16 +26,17 @@ export interface getExtensionsPluginProps {
   searchContainer?: HTMLElement | null
   hotkey?: Hotkey
   editorRef: React.MutableRefObject<ReactCodeMirrorRef | null>
+  deletedPlaceholders: string[]
 }
 
 export const getExtensionsPlugin = ({
   // getPlaceholderInfo,
-  completions, hintPaths,keywords, keywordsColor, keywordsClassName, quickMatchMap, operatorKeywords, searchContainer, hotkey, editorRef
+  completions, hintPaths,keywords, keywordsColor, keywordsClassName, quickMatchMap, operatorKeywords, searchContainer, hotkey, editorRef, deletedPlaceholders
 }: getExtensionsPluginProps): Extension[] => {
   return [
     keywords?.length ? keywordsPlugin(keywords, keywordsColor, keywordsClassName) : null,
     Theme,
-    placeholdersPlugin(quickMatchMap),
+    placeholdersPlugin(quickMatchMap, deletedPlaceholders),
     operatorKeyword(operatorKeywords),
     EditorView.lineWrapping,
     indentOnInput(),
@@ -44,7 +45,7 @@ export const getExtensionsPlugin = ({
     // searchContainer ? panelsPlugin(searchContainer) : null,
     searchPlugin(),
     lintGutter(),
-    Lint(),
+    Lint(deletedPlaceholders),
     customCompletions({completions, hintPaths, quickMatchMap}),
     syntaxHighlighting(newHighlightStyle),
     highlightActiveLineGutter(),

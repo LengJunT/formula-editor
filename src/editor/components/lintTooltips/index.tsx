@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Diagnostic } from '../../codermirror/lint'
+import { useEditorStore } from '../../store'
 
 const LintTooltipsAttrKey = 'data-diagnostic'
+const LintTooltipsOfObjAttrKey = 'data-obj-diagnostic'
 
 export {
-  LintTooltipsAttrKey
+  LintTooltipsAttrKey,
+  LintTooltipsOfObjAttrKey
 }
 
 const LintTooltips = (props: {
@@ -26,20 +29,28 @@ const LintTooltips = (props: {
 
   const handleMouseover = (e: MouseEvent) => {
     const target = e.target as HTMLElement
-    if (target && (target.hasAttribute(LintTooltipsAttrKey) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsAttrKey))) {
+    if (target && (target.hasAttribute(LintTooltipsAttrKey) || target.hasAttribute(LintTooltipsOfObjAttrKey) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsAttrKey)) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsOfObjAttrKey)) {
       const _v = target.getAttribute(LintTooltipsAttrKey) ?? (target.parentNode as HTMLElement)?.getAttribute(LintTooltipsAttrKey)
+      const __v = target.getAttribute(LintTooltipsOfObjAttrKey) ?? (target.parentNode as HTMLElement)?.getAttribute(LintTooltipsOfObjAttrKey)
       if (_v) {
         try {
           const data = JSON.parse(_v)
           handleState(target, data)
         } catch (e) {}
+      } else  if (__v) {
+        const lintDiagnostics = useEditorStore.getState().lintDiagnostics
+        const data = lintDiagnostics.find(item => item.type === 4)?.data
+        const diagnostic = data?.find(item => item.source === __v)
+        if (diagnostic) {
+          handleState(target, diagnostic)
+        }
       }
     }
   }
   const handleMouseout = (e: any) => {
     // console.log('handleMouseout', e)
     const target = e.target as HTMLElement
-    if (target && (target.hasAttribute(LintTooltipsAttrKey) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsAttrKey))) {
+    if (target && (target.hasAttribute(LintTooltipsAttrKey) || target.hasAttribute(LintTooltipsOfObjAttrKey) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsAttrKey)) || (target.parentNode as HTMLElement)?.hasAttribute?.(LintTooltipsOfObjAttrKey)) {
       setState({})
     }
   }

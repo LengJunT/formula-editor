@@ -25,7 +25,6 @@ const Code2 = () => {
     quickMatchMap[item.value ?? item.label] = item
   })
   const operatorKeywords = operatorCompletions.map(item => item.label)
-  console.log('123', keywords, completions, quickMatchMap)
   const [keymap, setKeymap] = useState(defaultHotkey)
   const keydownSub = useRef<Subscription>()
   const handleKeymap = () => {
@@ -77,6 +76,7 @@ const Code2 = () => {
       keywordsColor={'red'}
       quickMatchMap={quickMatchMap}
       operatorKeywords={operatorKeywords}
+      deletedPlaceholders={['user']}
       hintPaths={[{
         label: 'user',
         template: 'user',

@@ -124,11 +124,10 @@ const handleGrammarRules = (doc: string, diagnostics: EditDiagnostics) => {
 }
 
 
-const delObjValue = ['setTime', 'creatUser']
-const handleDelObject = (doc: string, diagnostics: EditDiagnostics) => {
+const handleDelObject = (doc: string, diagnostics: EditDiagnostics, deletedPlaceholders: string[]) => {
   const data: Diagnostic[] = []
   const quickMatchMap = useEditorStore.getState().quickMatchMap
-  delObjValue.forEach(obj => {
+  deletedPlaceholders.forEach(obj => {
     const key = '${' + obj + '}'
     const arr = doc.split(key)
     arr.pop()
@@ -152,13 +151,13 @@ const handleDelObject = (doc: string, diagnostics: EditDiagnostics) => {
   })
 }
 
-export const Lint = () => {
+export const Lint = (deletedPlaceholders: string[]) => {
   return linter((view) => {
     const diagnostics: EditDiagnostics = []
     const docStr = view.state.doc.toString()
     handleOldFunctionWarning(docStr, diagnostics)
     handleUnmatchedPunctuation(docStr, diagnostics)
-    handleDelObject(docStr, diagnostics)
+    handleDelObject(docStr, diagnostics, deletedPlaceholders)
     handleGrammarRules(docStr, diagnostics)
     const setLintDiagnostics = useEditorStore.getState().setLintDiagnostics
     setLintDiagnostics(diagnostics)

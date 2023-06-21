@@ -141,7 +141,7 @@ function Code() {
 
   const ex = useMemo(() => {
     return [
-      placeholdersPlugin({})
+      // placeholdersPlugin({})
     ]
   }, [])
 

@@ -13,7 +13,7 @@ import TooltipCard from '../components/tooltipCard'
 import { TOOLTIP_KEY } from '../components/hoverTooltips'
 import { QuickMatchMap } from '../interface'
 import { useEditorStore } from '../store'
-import { LintTooltipsAttrKey } from '../components/lintTooltips'
+import { LintTooltipsAttrKey, LintTooltipsOfObjAttrKey } from '../components/lintTooltips'
 
 export type GetPlaceholderInfo = (text: string) => {
   /**
@@ -25,33 +25,23 @@ export type GetPlaceholderInfo = (text: string) => {
   value: string
 }[] | undefined
 
-export const placeholdersPlugin = (quickMatchMap: QuickMatchMap) => {
+export const placeholdersPlugin = (quickMatchMap: QuickMatchMap, deletedPlaceholders: string[]) => {
 
   class PlaceholderWidget extends WidgetType {
     text: string
-
-    // diagnosticsLength: number
-
     constructor(text: string) {
       super();
       this.text = text
-      // this.diagnosticsLength = 0
     }
 
     eq(other: PlaceholderWidget) {
-      // const lintDiagnostics = useEditorStore.getState().lintDiagnostics
-      // const data = lintDiagnostics.find(item => item.type === 4)?.data ?? []
-      // if (this.diagnosticsLength !== data?.length) {
-      //   this.diagnosticsLength = data.length
-      //   return false
-      // }
       return this.text == other.text;
     }
 
     toDOM() {
       let elt = document.createElement('span');
       if (!this.text) return elt;
-
+      console.log('toDOM')
       console.log(1, this.text)
       const config = this.text.split('.').map(key => quickMatchMap[key]).filter(i => !!i)
       let root = document.createElement('span');
@@ -70,6 +60,11 @@ export const placeholdersPlugin = (quickMatchMap: QuickMatchMap) => {
         if (diagnostic) {
           root.className = 'cm-lintRange cm-lintRange-error'
           root.setAttribute(LintTooltipsAttrKey, JSON.stringify(diagnostic))
+          root.append(elt)
+          return root
+        } else if (deletedPlaceholders.includes(cur.value)) {
+          root.className = 'cm-lintRange cm-lintRange-error'
+          root.setAttribute(LintTooltipsOfObjAttrKey, cur.value)
           root.append(elt)
           return root
         } else {
